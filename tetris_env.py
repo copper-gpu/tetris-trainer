@@ -323,7 +323,6 @@ class TetrisEnv(TetrisCore, gym.Env):
 
         # If we’re in human-render mode, ensure window exists and draw once:
         if self.render_mode == "human":
-            import pygame
             if self.window is None:
                 self._setup_pygame()
             self._draw()
@@ -342,7 +341,6 @@ class TetrisEnv(TetrisCore, gym.Env):
     def render(self, mode="human"):
         self.render_mode = mode
         if mode == "human":
-            import pygame
             if self.window is None:
                 self._setup_pygame()
             self._draw()
