@@ -63,3 +63,7 @@ environment steps to run. Press <kbd>Enter</kbd> to keep the default
 (``logs/run_01``, ``logs/run_02`` …) so each run is kept separate. When
 resuming training, the script also asks which existing checkpoint to
 load before continuing.
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
