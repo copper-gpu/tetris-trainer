@@ -180,8 +180,11 @@ class TetrisCore:
         n = len(full)
         if n:
             self.board = np.delete(self.board, full, axis=0)
+            # New empty rows should appear at the top of the playfield
+            # (higher indices) since row 0 represents the bottom.
             self.board = np.vstack([
-                np.zeros((n, self.WIDTH), np.int8), self.board
+                self.board,
+                np.zeros((n, self.WIDTH), np.int8)
             ])
             self.lines += n
         self._spawn(None)
