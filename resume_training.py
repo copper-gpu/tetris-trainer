@@ -68,6 +68,12 @@ def main() -> None:
         "--checkpoint",
         help="Checkpoint file to load (default: choose interactively)",
     )
+    parser.add_argument(
+        "--steps",
+        type=int,
+        default=10_000_000,
+        help="Additional timesteps to train (default: 10_000_000)",
+    )
     args = parser.parse_args()
 
     # ── 1. Build training and eval envs ─────────────────────
@@ -99,9 +105,9 @@ def main() -> None:
         render=False,
     )
 
-    # ── 5. Resume training for another 10M steps ────────────
+    # ── 5. Resume training ─────────────────────────────────
     model.learn(
-        total_timesteps=10_000_000,
+        total_timesteps=args.steps,
         callback=callback,
         reset_num_timesteps=False,
         log_interval=1,

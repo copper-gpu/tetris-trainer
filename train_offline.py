@@ -8,8 +8,10 @@ train_offline.py  –  PPO trainer with safe evaluation (fresh run)
 • Evaluation every full rollout, each episode capped at 2 000 steps
 • Console + TensorBoard + CSV logs under logs/run_01/
 • Best model auto-saved to checkpoints/best_model.zip
-• Final checkpoint saved as ppo_tetris_offline_10M.zip
+• Final checkpoint saved as ppo_tetris_offline_<N>M.zip
 """
+
+import argparse
 
 from stable_baselines3 import PPO
 from stable_baselines3.common.logger import configure
@@ -17,11 +19,21 @@ from stable_baselines3.common.callbacks import EvalCallback
 from stable_baselines3.common.utils import get_linear_fn
 from tetris_env.train_utils import make_training_envs, make_eval_env
 
+# ── command line args ─────────────────────────────────────
+parser = argparse.ArgumentParser(description="Train PPO offline")
+parser.add_argument(
+    "--steps",
+    type=int,
+    default=10_000_000,
+    help="Total timesteps to train (default: 10_000_000)",
+)
+args = parser.parse_args()
+
 # ── hyper-parameters ────────────────────────────────────
 N_ENVS        = 16
 ROLLOUT_STEPS = 2_048           # → 32 768 frames/update
 BATCH_SIZE    = 8_192           # must evenly divide 32 768
-TOTAL_STEPS   = 10_000_000      # train 10 million steps
+TOTAL_STEPS   = args.steps      # total timesteps to train
 MAX_EVAL_LEN  = 2_000           # cap each eval episode at 2 000 steps
 EVAL_EVERY    = 32_768          # evaluate once per full rollout
 
@@ -67,7 +79,7 @@ model = PPO(
 )
 model.set_logger(logger)
 
-# ── 6. Train for 10 M steps ─────────────────────────────────
+# ── 6. Train ────────────────────────────────────────────────
 model.learn(
     total_timesteps        = TOTAL_STEPS,
     callback               = callback,
@@ -75,8 +87,8 @@ model.learn(
     log_interval           = 1       # print every PPO update
 )
 
-# ── 7. Save the final 10 M checkpoint ──────────────────────
-millions = model.num_timesteps // 1_000_000   # should be 10
+# ── 7. Save the final checkpoint ───────────────────────────
+millions = model.num_timesteps // 1_000_000
 fname    = f"ppo_tetris_offline_{millions}M"
 model.save(fname)
 print(f"✅  Training finished – saved checkpoint to {fname}.zip")
