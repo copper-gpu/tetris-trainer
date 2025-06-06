@@ -1,0 +1,7 @@
+# Packages required to run the Tetris trainer and tests
+numpy
+gymnasium
+gym
+pygame
+stable-baselines3
+torch
