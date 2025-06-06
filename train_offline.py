@@ -11,7 +11,6 @@ train_offline.py  –  PPO trainer with safe evaluation (fresh run)
 • Final checkpoint saved as ppo_tetris_offline_10M.zip
 """
 
-import torch, os
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv
 from stable_baselines3.common.logger import configure
