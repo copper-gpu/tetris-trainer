@@ -9,7 +9,7 @@ Modern Guideline-style Tetris with a Gym-compatible interface and Pygame renderi
 * SRS rotation kicks
 * Gym-compatible: `env = TetrisEnv()`
 * Optional Pygame renderer for human play
-* Python 3.10+ (no walrus operators)
+* Requires Python 3.10 or newer
 """
 
 from __future__ import annotations
@@ -288,8 +288,8 @@ class TetrisEnv(TetrisCore, gym.Env):
 
     def __init__(self, seed: int | None = None):
         TetrisCore.__init__(self, seed)
-        # Default cell size so rgb_array rendering works before any window
-        # has been created via _setup_pygame().
+        # Default cell size so rgb_array rendering works before a window is created.
+        # Also used by the Pygame renderer.
         self.CELL = 24
         self.action_space = gym.spaces.Discrete(len(self.ACTIONS))
         self.observation_space = gym.spaces.Dict({
