@@ -12,13 +12,10 @@ train_offline.py  –  PPO trainer with safe evaluation (fresh run)
 """
 
 from stable_baselines3 import PPO
-from stable_baselines3.common.vec_env import DummyVecEnv
 from stable_baselines3.common.logger import configure
 from stable_baselines3.common.callbacks import EvalCallback
 from stable_baselines3.common.utils import get_linear_fn
-from stable_baselines3.common.monitor import Monitor
-from gymnasium.wrappers import TimeLimit, RecordEpisodeStatistics
-from tetris_env import TetrisEnv
+from tetris_env.train_utils import make_training_envs, make_eval_env
 
 # ── hyper-parameters ────────────────────────────────────
 N_ENVS        = 16
@@ -29,15 +26,10 @@ MAX_EVAL_LEN  = 2_000           # cap each eval episode at 2 000 steps
 EVAL_EVERY    = 32_768          # evaluate once per full rollout
 
 # ── 1. Build training envs ───────────────────────────────
-env = DummyVecEnv([lambda: TetrisEnv() for _ in range(N_ENVS)])
+env = make_training_envs(N_ENVS)
 
 # ── 2. Build evaluation env (Monitor + TimeLimit + stats) ─
-eval_env = Monitor(
-    TimeLimit(
-        RecordEpisodeStatistics(TetrisEnv()),
-        MAX_EVAL_LEN
-    )
-)
+eval_env = make_eval_env(MAX_EVAL_LEN)
 
 # ── 3. Logger setup (write to logs/run_01/) ───────────────
 RUN_ID = "run_01"
