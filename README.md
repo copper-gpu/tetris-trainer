@@ -23,3 +23,22 @@ After installation you can run the example scripts in this repository or your ow
 ```bash
 pytest
 ```
+
+## Command Line Interface
+
+A simple menu-driven interface is provided in `cli_menu.py` to make common
+actions easy for beginners. Run the script and pick an option:
+
+```bash
+python cli_menu.py
+```
+
+The menu lets you:
+
+1. Play Tetris manually using the `play.py` demo.
+2. Start training from scratch via `train_offline.py`.
+3. Resume training from a saved checkpoint with `resume_training.py`.
+4. Exit the program.
+
+Each option launches the corresponding script so you do not need to
+remember individual commands.
