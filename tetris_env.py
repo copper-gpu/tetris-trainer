@@ -9,7 +9,7 @@ Modern Guideline-style Tetris with a Gym-compatible interface and Pygame renderi
 * SRS rotation kicks
 * Gym-compatible: `env = TetrisEnv()`
 * Optional Pygame renderer for human play
-* Python 3.8+ (no walrus operators)
+* Python 3.10+ (no walrus operators)
 """
 
 from __future__ import annotations
