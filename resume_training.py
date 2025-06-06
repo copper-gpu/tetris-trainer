@@ -8,25 +8,17 @@ the new final model as ppo_tetris_offline_20M.zip.
 """
 
 from stable_baselines3 import PPO
-from stable_baselines3.common.vec_env import DummyVecEnv
 from stable_baselines3.common.logger import configure
 from stable_baselines3.common.callbacks import EvalCallback
-from stable_baselines3.common.monitor import Monitor
-from gymnasium.wrappers import TimeLimit, RecordEpisodeStatistics
-from tetris_env import TetrisEnv
+from tetris_env.train_utils import make_training_envs, make_eval_env
 
 # ── 1. Build training envs ─────────────────────────────────
 N_ENVS = 16
-env = DummyVecEnv([lambda: TetrisEnv() for _ in range(N_ENVS)])
+env = make_training_envs(N_ENVS)
 
 # ── 2. Build evaluation env (monitor + cap + stats) ─────────
 MAX_EVAL_LEN = 2_000  # cap each episode at 2K steps
-eval_env = Monitor(
-    TimeLimit(
-        RecordEpisodeStatistics(TetrisEnv()),
-        MAX_EVAL_LEN
-    )
-)
+eval_env = make_eval_env(MAX_EVAL_LEN)
 
 # ── 3. Load previous 10M-step checkpoint ────────────────────
 #    Adjust the filename if you saved under a different name
