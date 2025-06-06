@@ -21,9 +21,17 @@ def main():
         if choice == "1":
             subprocess.run([sys.executable, "play.py"], check=True)
         elif choice == "2":
-            subprocess.run([sys.executable, "train_offline.py"], check=True)
+            steps = input("Train for how many steps? [10_000_000]: ").strip()
+            cmd = [sys.executable, "train_offline.py"]
+            if steps:
+                cmd += ["--steps", steps]
+            subprocess.run(cmd, check=True)
         elif choice == "3":
-            subprocess.run([sys.executable, "resume_training.py"], check=True)
+            steps = input("Additional steps to train? [10_000_000]: ").strip()
+            cmd = [sys.executable, "resume_training.py"]
+            if steps:
+                cmd += ["--steps", steps]
+            subprocess.run(cmd, check=True)
         elif choice == "4":
             print("Goodbye!")
             break
