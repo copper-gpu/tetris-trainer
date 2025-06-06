@@ -356,7 +356,7 @@ class TetrisEnv(TetrisCore, gym.Env):
     # ── pygame helpers ──
     def _setup_pygame(self):
         """
-        Initialise Pygame and open a window large enough for:
+        Initialize Pygame and open a window large enough for:
         • 120-px HOLD box  (5×24)
         • 20-px gutter
         • 240-px board     (10×24)
