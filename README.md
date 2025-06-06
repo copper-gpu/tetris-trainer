@@ -38,14 +38,15 @@ The menu lets you:
 1. Play Tetris manually using the `play.py` demo.
 2. Start training from scratch via `train_offline.py`.
 3. Resume training from a saved checkpoint with `resume_training.py`.
-4. Exit the program.
+4. View the latest `checkpoints/best_model.zip` with `live_view.py`.
+5. Exit the program.
 
 Each option launches the corresponding script so you do not need to
 remember individual commands.
 
 When choosing options 2 or 3 you will be prompted for how many
 environment steps to run. Press <kbd>Enter</kbd> to keep the default
-10,000,000. When resuming training, the script also asks which existing
-checkpoint to load and automatically increments the log folder
-(``logs/run_02``, ``logs/run_03`` …) so your progress is clearly
-separated.
+10,000,000. Both training modes automatically increment the log folder
+(``logs/run_01``, ``logs/run_02`` …) so each run is kept separate. When
+resuming training, the script also asks which existing checkpoint to
+load before continuing.

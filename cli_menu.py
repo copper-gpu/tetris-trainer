@@ -9,7 +9,8 @@ MENU = textwrap.dedent(
     1. Play manually
     2. Train new model (fresh run)
     3. Resume training (continue)
-    4. Exit
+    4. View best model (live)
+    5. Exit
     """
 )
 
@@ -33,6 +34,8 @@ def main():
                 cmd += ["--steps", steps]
             subprocess.run(cmd, check=True)
         elif choice == "4":
+            subprocess.run([sys.executable, "live_view.py"], check=True)
+        elif choice == "5":
             print("Goodbye!")
             break
         else:

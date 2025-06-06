@@ -6,18 +6,35 @@ train_offline.py  –  PPO trainer with safe evaluation (fresh run)
 • Mini-batch 8 192  (4 per update)
 • Linear LR decay 5e-4 → 1e-5
 • Evaluation every full rollout, each episode capped at 2 000 steps
-• Console + TensorBoard + CSV logs under logs/run_01/
+• Console + TensorBoard + CSV logs under ``logs/run_XX/``
+  (new ``run_XX`` folder auto-created each run)
 • Best model auto-saved to checkpoints/best_model.zip
 • Final checkpoint saved as ppo_tetris_offline_<N>M.zip
 """
 
 import argparse
 
+from pathlib import Path
+import re
+
 from stable_baselines3 import PPO
 from stable_baselines3.common.logger import configure
 from stable_baselines3.common.callbacks import EvalCallback
 from stable_baselines3.common.utils import get_linear_fn
 from tetris_env.train_utils import make_training_envs, make_eval_env
+
+
+def next_run_id() -> str:
+    """Return ``run_XX`` where ``XX`` is one higher than existing log folders."""
+    logs = Path("logs")
+    logs.mkdir(exist_ok=True)
+    numbers = []
+    for d in logs.iterdir():
+        m = re.match(r"run_(\d+)", d.name)
+        if m:
+            numbers.append(int(m.group(1)))
+    next_num = max(numbers, default=1) + 1
+    return f"run_{next_num:02d}"
 
 # ── command line args ─────────────────────────────────────
 parser = argparse.ArgumentParser(description="Train PPO offline")
@@ -43,8 +60,8 @@ env = make_training_envs(N_ENVS)
 # ── 2. Build evaluation env (Monitor + TimeLimit + stats) ─
 eval_env = make_eval_env(MAX_EVAL_LEN)
 
-# ── 3. Logger setup (write to logs/run_01/) ───────────────
-RUN_ID = "run_01"
+# ── 3. Logger setup (auto-increment run folder) ───────────
+RUN_ID = next_run_id()
 logger = configure(
     folder        = f"logs/{RUN_ID}",
     format_strings= ["stdout", "tensorboard", "csv"]
