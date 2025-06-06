@@ -4,16 +4,21 @@ This repository provides a small Gym-compatible Tetris environment used for rein
 
 ## Quickstart
 
-Run the `quickstart.sh` script to install all dependencies and launch the
-menu-driven interface in one step. The script uses `python3` so make sure
-it is available on your PATH:
+Run the quickstart script to install all dependencies and launch the
+menu-driven interface in one step. On Linux or macOS use `quickstart.sh`
+(which relies on `python3` being on your `PATH`). On Windows run the new
+`quickstart.bat` file.
 
 ```bash
-./quickstart.sh
+./quickstart.sh      # Linux/macOS
 ```
 
-The script installs the package in editable mode, installs the runtime
-dependencies from `requirements.txt` and then starts `cli_menu.py`.
+```bat
+quickstart.bat       # Windows
+```
+
+Both scripts install the package in editable mode, install the runtime
+dependencies from `requirements.txt` and then start `cli_menu.py`.
 
 ## Installation
 
@@ -23,10 +28,10 @@ Install the package in editable mode so the `tetris_env` module can be imported 
 pip install -e .
 ```
 
-The environment requires NumPy and either Gymnasium or Gym. If they are not already installed, run:
+Then install all runtime dependencies from `requirements.txt`:
 
 ```bash
-pip install numpy gymnasium gym
+pip install -r requirements.txt
 ```
 
 After installation you can run the example scripts in this repository or your own code that imports `tetris_env`.
