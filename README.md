@@ -2,6 +2,19 @@
 
 This repository provides a small Gym-compatible Tetris environment used for reinforcement learning experiments.
 
+## Quickstart
+
+Run the `quickstart.sh` script to install all dependencies and launch the
+menu-driven interface in one step. The script uses `python3` so make sure
+it is available on your PATH:
+
+```bash
+./quickstart.sh
+```
+
+The script installs the package in editable mode, installs the runtime
+dependencies from `requirements.txt` and then starts `cli_menu.py`.
+
 ## Installation
 
 Install the package in editable mode so the `tetris_env` module can be imported by tests and example scripts:
