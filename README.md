@@ -1,22 +1,16 @@
 # Tetris Trainer
 
-This repository contains a reinforcement learning environment and training scripts
-for a modern Guideline-style Tetris game. It uses Stable Baselines3 with PPO and
-provides utilities for offline training, resuming training, and viewing the
-latest model in a Pygame window.
+1  # Tetris Trainer
+2  
+3  This repository provides a small gym compatible Tetris environment used for reinforcement learning experiments.
+4  
+5  ## Installation
+6  
+7  Install the package in editable mode so the `tetris_env` module can be imported by tests and scripts.
+8  
+9  ```bash
+10  pip install -e .
+11  ```
+12  
+13  After installation you can run the examples in this repository or your own code that imports `tetris_env`.
 
-## Installation
-
-Install Python dependencies with pip:
-
-```bash
-pip install -r requirements.txt
-```
-
-This installs `numpy`, `gymnasium`/`gym`, `pygame`, `stable-baselines3`, `torch`, and
-any other packages required to run the code and tests.
-
-## Usage
-
-See `train_offline.py`, `resume_training.py`, and `live_view.py` for examples of
-how to train and interact with the environment.
