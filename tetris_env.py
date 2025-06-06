@@ -288,8 +288,8 @@ class TetrisEnv(TetrisCore, gym.Env):
 
     def __init__(self, seed: int | None = None):
         TetrisCore.__init__(self, seed)
-        # Default cell size so rgb_array rendering works before any window
-        # has been created via _setup_pygame().
+        # Default cell size so rgb_array rendering works before a window is created.
+        # Also used by the Pygame renderer.
         self.CELL = 24
         self.action_space = gym.spaces.Discrete(len(self.ACTIONS))
         self.observation_space = gym.spaces.Dict({
