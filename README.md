@@ -42,3 +42,7 @@ The menu lets you:
 
 Each option launches the corresponding script so you do not need to
 remember individual commands.
+
+When resuming training, the script now asks which existing checkpoint to
+load and automatically increments the log folder (``logs/run_02``,
+``logs/run_03`` …) so your progress is clearly separated.
