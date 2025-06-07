@@ -82,7 +82,12 @@ def _load_model_async():
     """Background thread target for loading the PPO checkpoint."""
     global loaded_model, load_exception
     try:
-        loaded_model = PPO.load(BEST_MODEL, env=env, device=device)
+        # Load the PPO checkpoint without attaching the live environment.
+        # stable_baselines3 will access the environment's spaces during load,
+        # which is safe, but calling env.reset() inside this background thread
+        # can freeze Pygame.  By loading without ``env`` and assigning it on
+        # the main thread, we avoid any Pygame calls outside the main loop.
+        loaded_model = PPO.load(BEST_MODEL, device=device)
     except Exception as e:
         load_exception = e
 
@@ -108,6 +113,11 @@ while True:
             time.sleep(1.0)
             continue
         model = loaded_model
+        if model is not None:
+            # Attach the live environment on the main thread where all
+            # Pygame interactions happen. Calling set_env here ensures we
+            # avoid any Pygame calls from the loader thread.
+            model.set_env(env)
         loaded_model = None
         last_hash = hash_being_loaded
         print(f"🔄  Reloaded {BEST_MODEL}  (hash {last_hash[:8]})")
