@@ -16,6 +16,7 @@ Key points:
 import time
 import hashlib
 import sys
+import logging
 from pathlib import Path
 import threading
 
@@ -63,6 +64,14 @@ def md5(path: Path) -> str | None:
 # ── Initialize Pygame + one persistent TetrisEnv + window ─────────
 def main() -> None:
     pygame.init()
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)s: %(message)s",
+        handlers=[
+            logging.FileHandler("live_view.log", encoding="utf-8"),
+            logging.StreamHandler(sys.stdout),
+        ],
+    )
     global env, FONT
     global load_thread, load_exception, loaded_model, hash_being_loaded
     global model, last_hash
@@ -120,7 +129,7 @@ def main() -> None:
                 continue
             load_thread.join()
             if load_exception:
-                print("❌  Failed to load checkpoint:", load_exception)
+                logging.error("Failed to load checkpoint: %s", load_exception)
                 load_exception = None
                 load_thread = None
                 time.sleep(1.0)
@@ -133,12 +142,13 @@ def main() -> None:
                 model.set_env(env)
             loaded_model = None
             last_hash = hash_being_loaded
-            print(f"🔄  Reloaded {BEST_MODEL}  (hash {last_hash[:8]})")
+            logging.info("Reloaded %s (hash %s)", BEST_MODEL, last_hash[:8])
             load_thread = None
             continue
 
         if not BEST_MODEL.exists():
             overlay("Waiting for checkpoints/best_model.zip …")
+            logging.info("Waiting for %s", BEST_MODEL)
             time.sleep(1.0)
             continue
 
@@ -148,6 +158,7 @@ def main() -> None:
             continue
         if current_hash != last_hash:
             overlay("Loading best model …")
+            logging.info("Detected new checkpoint; loading …")
             hash_being_loaded = current_hash
             load_thread = threading.Thread(target=_load_model_async)
             load_thread.start()
@@ -156,6 +167,7 @@ def main() -> None:
         # 3) Play one episode, then loop back for the next
         try:
             obs, _ = env.reset()   # Always reset at the start of each new episode
+            logging.info("Starting new episode")
             done = False
             while not done:
                 # keep window responsive inside the episode
@@ -170,7 +182,7 @@ def main() -> None:
             # ── Episode ended; loop returns to top, resets again ──
 
         except Exception as e:
-            print("⚠️  Runtime error during play:", e, "– restarting episode")
+            logging.error("Runtime error during play: %s – restarting", e)
             time.sleep(0.5)
             # Loop will naturally go back, reset, and try again
 
