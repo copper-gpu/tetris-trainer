@@ -65,8 +65,8 @@ python cli_menu.py
 The menu lets you:
 
 1. Play Tetris manually using the `play.py` demo.
-2. Start training from scratch via `train_offline.py`.
-3. Resume training from a saved checkpoint with `resume_training.py`.
+2. Start training from scratch via `trainer.py start`.
+3. Resume training from a saved checkpoint with `trainer.py resume`.
 4. View the latest `checkpoints/best_model.zip` with `live_view.py`.
 5. Exit the program.
 
