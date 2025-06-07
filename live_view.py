@@ -87,7 +87,11 @@ def _load_model_async():
         # which is safe, but calling env.reset() inside this background thread
         # can freeze Pygame.  By loading without ``env`` and assigning it on
         # the main thread, we avoid any Pygame calls outside the main loop.
-        loaded_model = PPO.load(BEST_MODEL, device=device)
+        loaded_model = PPO.load(
+            BEST_MODEL,
+            device=device,
+            custom_objects={"n_envs": 1},  # allow attaching single-env later
+        )
     except Exception as e:
         load_exception = e
 
