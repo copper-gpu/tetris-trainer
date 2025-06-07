@@ -17,6 +17,7 @@ import time
 import hashlib
 import sys
 from pathlib import Path
+import threading
 
 try:  # Ensure pygame is available
     import pygame
@@ -40,6 +41,12 @@ BEST_MODEL = Path("checkpoints/best_model.zip")
 last_hash  = None       # MD5 of the last‐loaded checkpoint
 model      = None
 device     = "cpu"      # do inference on CPU to leave GPU for training
+
+# Async model loading helpers
+load_thread      = None
+load_exception   = None
+loaded_model     = None
+hash_being_loaded = None
 
 # ── Helper to compute MD5 on the checkpoint file ──────────────────
 def md5(path: Path) -> str:
@@ -70,6 +77,15 @@ def overlay(text: str):
     env.renderer.window.blit(surf, (0, 0))
     pygame.display.flip()
 
+
+def _load_model_async():
+    """Background thread target for loading the PPO checkpoint."""
+    global loaded_model, load_exception
+    try:
+        loaded_model = PPO.load(BEST_MODEL, env=env, device=device)
+    except Exception as e:
+        load_exception = e
+
 # ── Main loop ─────────────────────────────────────────────────────
 while True:
     # 1) Service Pygame events to keep the window responsive
@@ -78,22 +94,37 @@ while True:
             pygame.quit()
             sys.exit()
 
-    # 2) If a new checkpoint appears, load it
-    if BEST_MODEL.exists():
-        current_hash = md5(BEST_MODEL)
-        if current_hash != last_hash:
+    # 2) Load checkpoints asynchronously so the window never freezes
+    if load_thread is not None:
+        if load_thread.is_alive():
             overlay("Loading best model …")
-            try:
-                model = PPO.load(BEST_MODEL, env=env, device=device)
-                last_hash = current_hash
-                print(f"🔄  Reloaded {BEST_MODEL}  (hash {current_hash[:8]})")
-            except Exception as e:
-                print("❌  Failed to load checkpoint:", e)
-                time.sleep(1.0)
-                continue
-    else:
+            time.sleep(0.1)
+            continue
+        load_thread.join()
+        if load_exception:
+            print("❌  Failed to load checkpoint:", load_exception)
+            load_exception = None
+            load_thread = None
+            time.sleep(1.0)
+            continue
+        model = loaded_model
+        loaded_model = None
+        last_hash = hash_being_loaded
+        print(f"🔄  Reloaded {BEST_MODEL}  (hash {last_hash[:8]})")
+        load_thread = None
+        continue
+
+    if not BEST_MODEL.exists():
         overlay("Waiting for checkpoints/best_model.zip …")
         time.sleep(1.0)
+        continue
+
+    current_hash = md5(BEST_MODEL)
+    if current_hash != last_hash:
+        overlay("Loading best model …")
+        hash_being_loaded = current_hash
+        load_thread = threading.Thread(target=_load_model_async)
+        load_thread.start()
         continue
 
     # 3) Play one episode, then loop back for the next
