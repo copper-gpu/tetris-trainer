@@ -15,6 +15,9 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import EvalCallback
 from stable_baselines3.common.logger import configure
 from stable_baselines3.common.utils import get_linear_fn
+import torch
+
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 from tetris_env.train_utils import make_eval_env, make_training_envs
 
@@ -89,7 +92,7 @@ def start_cmd(args: argparse.Namespace) -> None:
     )
 
     if args.checkpoint:
-        model = PPO.load(args.checkpoint, env=env, device="cuda")
+        model = PPO.load(args.checkpoint, env=env, device=DEVICE)
     else:
         model = PPO(
             "MultiInputPolicy",
@@ -103,7 +106,7 @@ def start_cmd(args: argparse.Namespace) -> None:
             vf_coef=0.2,
             ent_coef=0.01,
             policy_kwargs=dict(net_arch=[256, 256, 128]),
-            device="cuda",
+            device=DEVICE,
             verbose=1,
             tensorboard_log=f"logs/{run_id}",
         )
@@ -129,7 +132,7 @@ def resume_cmd(args: argparse.Namespace) -> None:
     eval_env = make_eval_env(MAX_EVAL_LEN)
 
     ckpt_path = select_checkpoint(args.checkpoint)
-    model = PPO.load(ckpt_path, env=env, device="cuda")
+    model = PPO.load(ckpt_path, env=env, device=DEVICE)
 
     run_id = next_run_id()
     logger = configure(folder=f"logs/{run_id}", format_strings=["stdout", "tensorboard", "csv"])

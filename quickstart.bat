@@ -9,4 +9,5 @@ call .venv\Scripts\activate.bat
 
 python -m pip install -e .
 python -m pip install -r requirements.txt
+python -m pip install --force-reinstall torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 python cli_menu.py

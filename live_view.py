@@ -12,10 +12,12 @@ import time
 from pathlib import Path
 
 import pygame
+import torch
 from stable_baselines3 import PPO
 
 from tetris_env import TetrisEnv
 
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 BEST_MODEL = Path("checkpoints/best_model.zip")
 
 
@@ -72,7 +74,7 @@ def main() -> None:
         current_hash = file_hash(BEST_MODEL)
         if model is None or current_hash != last_hash:
             overlay(env, font, "Loading best model …")
-            model = PPO.load(BEST_MODEL, env=env, device="cpu")
+            model = PPO.load(BEST_MODEL, env=env, device=DEVICE)
             last_hash = current_hash
             env.reset()
 
