@@ -38,6 +38,10 @@ After installation you can run the example scripts in this repository or your ow
 
 ## Running tests
 
+Run `pytest` to execute the automated checks in the `tests` directory. These
+tests create a `TetrisEnv` instance and verify core behaviours including
+environment resets, piece movement, hard drop locking and game over detection.
+
 ```bash
 pytest
 ```
