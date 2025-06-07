@@ -15,6 +15,7 @@ dependencies = [
     "pygame",
     "stable-baselines3",
     "torch",
+    "tensorboard",
 ]
 
 [tool.setuptools.packages.find]
