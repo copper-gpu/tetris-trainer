@@ -19,7 +19,8 @@ quickstart.bat       # Windows
 ```
 
 Both scripts install the package in editable mode, install the runtime
-dependencies from `requirements.txt` and then start `cli_menu.py`.
+dependencies from `requirements.txt` (which now includes `tensorboard`
+for logging training runs) and then start `cli_menu.py`.
 
 ## Installation
 

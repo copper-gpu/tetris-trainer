@@ -5,3 +5,4 @@ gym
 pygame
 stable-baselines3
 torch
+tensorboard
