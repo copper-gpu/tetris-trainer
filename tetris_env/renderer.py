@@ -16,6 +16,8 @@ class PygameRenderer:
         self.window = None
         self.clock = None
         self.CELL = 24
+        self.font = None
+        self.font_bold = None
 
     def setup(self):
         pygame.init()
@@ -23,6 +25,9 @@ class PygameRenderer:
         WIN_W, WIN_H = 640, 600
         self.window = pygame.display.set_mode((WIN_W, WIN_H))
         self.clock = pygame.time.Clock()
+        pygame.font.init()
+        self.font = pygame.font.SysFont("consolas", 18)
+        self.font_bold = pygame.font.SysFont("consolas", 18, bold=True)
 
     def array_frame(self):
         surf = pygame.Surface((10 * self.CELL, 20 * self.CELL))
@@ -35,8 +40,7 @@ class PygameRenderer:
         self._draw_board(board_surf, blit_to=self.window, origin=(180, 40))
         self._draw_piece_box(self.env.hold_piece, (20, 40), "HOLD")
         self._draw_next(origin=(460, 40))
-        font = pygame.font.SysFont("consolas", 18)
-        self.window.blit(font.render(f"Lines: {self.env.lines}", True, (220,220,220)), (20, 560))
+        self.window.blit(self.font.render(f"Lines: {self.env.lines}", True, (220,220,220)), (20, 560))
         pygame.display.flip()
 
     def close(self):
@@ -66,16 +70,14 @@ class PygameRenderer:
     def _draw_piece_box(self, piece, topleft, label):
         CELL = self.CELL
         pygame.draw.rect(self.window, (255, 255, 255), (*topleft, 5*CELL, 4*CELL), 2)
-        font = pygame.font.SysFont("consolas", 18, True)
-        self.window.blit(font.render(label, True, (255,255,255)), (topleft[0]+4, topleft[1]-22))
+        self.window.blit(self.font_bold.render(label, True, (255,255,255)), (topleft[0]+4, topleft[1]-22))
         if piece:
             self._draw_mini(piece, (topleft[0]+CELL, topleft[1]+CELL))
 
     def _draw_next(self, origin=(460, 40)):
         CELL = self.CELL
         pygame.draw.rect(self.window, (255, 255, 255), (*origin, 5*CELL, 20*CELL), 2)
-        font = pygame.font.SysFont("consolas", 18, bold=True)
-        self.window.blit(font.render("NEXT", True, (255,255,255)), (origin[0]+4, origin[1]-22))
+        self.window.blit(self.font_bold.render("NEXT", True, (255,255,255)), (origin[0]+4, origin[1]-22))
         for i, p in enumerate(self.env.queue[:5]):
             self._draw_mini(p, (origin[0]+CELL, origin[1]+i*4*CELL))
 
