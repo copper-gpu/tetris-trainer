@@ -61,11 +61,13 @@ def overlay(text: str):
     """
     Draw a translucent overlay with `text` centered in the window.
     """
-    surf = pygame.Surface(env.window.get_size(), pygame.SRCALPHA)
-    surf.fill((0, 0, 0, 180))  # semi‐transparent black
+    if env.renderer is None or env.renderer.window is None:
+        return
+    surf = pygame.Surface(env.renderer.window.get_size(), pygame.SRCALPHA)
+    surf.fill((0, 0, 0, 180))  # semi-transparent black
     txt  = FONT.render(text, True, (255, 255, 255))
     surf.blit(txt, txt.get_rect(center=surf.get_rect().center))
-    env.window.blit(surf, (0, 0))
+    env.renderer.window.blit(surf, (0, 0))
     pygame.display.flip()
 
 # ── Main loop ─────────────────────────────────────────────────────
