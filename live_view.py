@@ -15,11 +15,26 @@ Key points:
 
 import time
 import hashlib
-import pygame
 import sys
 from pathlib import Path
-from stable_baselines3 import PPO
-from tetris_env import TetrisEnv
+
+try:  # Ensure pygame is available
+    import pygame
+except ModuleNotFoundError as e:  # pragma: no cover - for runtime diagnostics
+    print("Error: pygame is not installed. Run 'pip install -r requirements.txt' first.")
+    raise SystemExit(1) from e
+
+try:  # Ensure stable_baselines3 is installed
+    from stable_baselines3 import PPO
+except ModuleNotFoundError as e:  # pragma: no cover - for runtime diagnostics
+    print("Error: stable-baselines3 is not installed. Run 'pip install -r requirements.txt' first.")
+    raise SystemExit(1) from e
+
+try:  # Ensure editable install of this repo
+    from tetris_env import TetrisEnv
+except ModuleNotFoundError as e:  # pragma: no cover - for runtime diagnostics
+    print("Error: could not import tetris_env. Did you run 'pip install -e .'?")
+    raise SystemExit(1) from e
 
 BEST_MODEL = Path("checkpoints/best_model.zip")
 last_hash  = None       # MD5 of the last‐loaded checkpoint
