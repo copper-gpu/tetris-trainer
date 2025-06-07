@@ -19,9 +19,9 @@ quickstart.bat       # Windows
 ```
 
 Both scripts install the package in editable mode and the runtime
-dependencies from `requirements.txt`. They then install the CUDA build
-of PyTorch so training can make use of your GPU before launching
-`cli_menu.py`.
+dependencies from `requirements.txt` (which includes `tensorboard` for
+logging training runs). They then install the CUDA build of PyTorch so
+training can make use of your GPU before launching `cli_menu.py`.
 
 ## Installation
 
