@@ -5,9 +5,10 @@ This repository provides a small Gym-compatible Tetris environment used for rein
 ## Quickstart
 
 Run the quickstart script to install all dependencies and launch the
-menu-driven interface in one step. On Linux or macOS use `quickstart.sh`
-(which relies on `python3` being on your `PATH`). On Windows run the new
-`quickstart.bat` file.
+menu-driven interface in one step. Both scripts create a local virtual
+environment in `.venv` so they do not affect system-wide packages. On
+Linux or macOS use `quickstart.sh` (which relies on `python3` being on
+your `PATH`). On Windows run `quickstart.bat`.
 
 ```bash
 ./quickstart.sh      # Linux/macOS
@@ -17,8 +18,10 @@ menu-driven interface in one step. On Linux or macOS use `quickstart.sh`
 quickstart.bat       # Windows
 ```
 
-Both scripts install the package in editable mode, install the runtime
-dependencies from `requirements.txt` and then start `cli_menu.py`.
+Both scripts install the package in editable mode and the runtime
+dependencies from `requirements.txt`. They then install the CUDA build
+of PyTorch so training can make use of your GPU before launching
+`cli_menu.py`.
 
 ## Installation
 
