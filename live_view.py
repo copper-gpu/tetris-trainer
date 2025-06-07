@@ -64,6 +64,9 @@ def md5(path: Path) -> str | None:
 def main() -> None:
     pygame.init()
     global env, FONT
+    global load_thread, load_exception, loaded_model, hash_being_loaded
+    global model, last_hash
+
     FONT = pygame.font.SysFont("consolas", 28, bold=True)
 
     env = TetrisEnv()
