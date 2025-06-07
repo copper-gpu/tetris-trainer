@@ -5,9 +5,10 @@ This repository provides a small Gym-compatible Tetris environment used for rein
 ## Quickstart
 
 Run the quickstart script to install all dependencies and launch the
-menu-driven interface in one step. On Linux or macOS use `quickstart.sh`
-(which relies on `python3` being on your `PATH`). On Windows run the new
-`quickstart.bat` file.
+menu-driven interface in one step. Both scripts create a local virtual
+environment in `.venv` so they do not affect system-wide packages. On
+Linux or macOS use `quickstart.sh` (which relies on `python3` being on
+your `PATH`). On Windows run `quickstart.bat`.
 
 ```bash
 ./quickstart.sh      # Linux/macOS
