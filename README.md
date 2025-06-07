@@ -18,10 +18,16 @@ your `PATH`). On Windows run `quickstart.bat`.
 quickstart.bat       # Windows
 ```
 
+codex/check-errors-causing-live_view.py-crash
 Both scripts install the package in editable mode and the runtime
 dependencies from `requirements.txt` (which includes `tensorboard` for
 logging training runs). They then install the CUDA build of PyTorch so
 training can make use of your GPU before launching `cli_menu.py`.
+
+Both scripts install the package in editable mode, install the runtime
+dependencies from `requirements.txt` (which now includes `tensorboard`
+for logging training runs) and then start `cli_menu.py`.
+main
 
 ## Installation
 
